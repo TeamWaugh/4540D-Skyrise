@@ -1,10 +1,3 @@
-/*
- * lcdmenu.h
- *
- *  Created on: Mar 19, 2015
- *      Author: Kevin
- */
-
 #ifndef LCDMENU_H_
 #define LCDMENU_H_
 

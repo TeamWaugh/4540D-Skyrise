@@ -1,28 +1,23 @@
-/*
- * sensors.h
- *
- *  Created on: Mar 20, 2015
- *      Author: Kevin
- */
-
 #ifndef SENSORS_H_
 #define SENSORS_H_
 
-#define sArmLeft        1
-#define sArmLeftReverse 0
+#define sArmRight    1
+#define sArmRightDir 1
 
-#define sArmRight        8
-#define sArmRightReverse 0
+#define sArmLeft     8
+#define sArmLeftDir  1
 
-#define sEncLeftTop     1
-#define sEncLeft        2
-#define sEncLeftReverse 0
+Encoder eRight;
+#define sEncRightTop  1
+#define sEncRight     2
+#define sEncRightDir -1
 
-#define sEncRightTop     11
-#define sEncRight        12
-#define sEncRightReverse  1
+Encoder eLeft;
+#define sEncLeftTop 11
+#define sEncLeft    12
+#define sEncLeftDir -1
 
-#define sClawTilt        2
-#define sClawTiltReverse 0
+#define sClawTilt    2
+#define sClawTiltDir 1
 
 #endif /* SENSORS_H_ */

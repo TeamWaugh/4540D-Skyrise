@@ -1,26 +1,22 @@
-/*
- * encoders.c
- *
- *  Created on: Mar 18, 2015
- *      Author: Kevin
- */
-
 #include "main.h"
 #include "motors.h"
+#include "sensors.h"
 #include "encoders.h"
+#include "lcdmenu.h"
 #include "lib.h"
 #include <math.h>
 
-int slopeLen=200;
+int slopeLen=100;
 float adjustment=20;
 
 void enc(float l,float r,int edist) {
-	encoderReset(eLeft);
-	encoderReset(eRight);
+	int lBase=encoderGet(eLeft);
+	int rBase=encoderGet(eRight);
 	int cdist=0;
+	lcdRender();
 	while (cdist<edist) {
-		int lDist=encoderGet(eLeft)/l;
-		int rDist=encoderGet(eRight)/r;
+		int lDist=(encoderGet(eLeft)-lBase)/l;
+		int rDist=(encoderGet(eRight)-rBase)/r;
 		cdist=favg(lDist,rDist);
 
 		float power=fclampf(fminf(cdist/slopeLen,(edist-cdist)/(slopeLen/2))*127,minDrive,127);
@@ -33,6 +29,8 @@ void enc(float l,float r,int edist) {
 		int powerRight=fclampf(power+offset,-127,127);
 		motorSet(mTopRight,mTopRightDir*powerRight);
 		motorSet(mBottomRight,mBottomRightDir*powerRight);
+
+		lcdUpdate();
 		delay(20);
 	}
 }
@@ -49,16 +47,16 @@ void backward(int dist) {
 
 void turnLeft(int deg) {
 	if (encReverse) {
-		enc(1,-1,deg*3.5);
+		enc(1,-1,deg*encToDeg);
 	} else {
-		enc(-1,1,deg*3.5);
+		enc(-1,1,deg*encToDeg);
 	}
 }
 
 void turnRight(int deg) {
 	if (encReverse) {
-		enc(-1,1,deg*3.5);
+		enc(-1,1,deg*encToDeg);
 	} else {
-		enc(1,-1,deg*3.5);
+		enc(1,-1,deg*encToDeg);
 	}
 }

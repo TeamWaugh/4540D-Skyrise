@@ -1,10 +1,3 @@
-/*
- * lib.c
- *
- *  Created on: Mar 18, 2015
- *      Author: Kevin
- */
-
 #include <math.h>
 
 

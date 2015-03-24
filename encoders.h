@@ -11,6 +11,7 @@
 void enc(float l,float r,int edist);
 void forward(int dist);
 void backward(int dist);
+#define encToDeg 3.5
 void turnLeft(int deg);
 void turnRight(int deg);
 int encReverse;

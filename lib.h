@@ -1,10 +1,3 @@
-/*
- * lib.h
- *
- *  Created on: Mar 18, 2015
- *      Author: Kevin
- */
-
 #ifndef LIB_H_
 #define LIB_H_
 
