@@ -1,9 +1,7 @@
 #ifndef RECORD_H_
 #define RECORD_H_
 
-void recordInit(const char* name);
-void recordUpdate();
-void recordEnd();
-void recordRead(const char* name);
+void record(const char* name);
+void play(const char* name);
 
 #endif /* RECORD_H_ */

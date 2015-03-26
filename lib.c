@@ -25,6 +25,10 @@ float froundf(float a,float n) {
 	return floorf(a/n)*n;
 }
 
+int avg(int a,int b) {
+	return (a+b)/2;
+}
+
 int min(int a,int b) {
 	return a>b?b:a;
 }

@@ -2,6 +2,7 @@
 #include "motors.h"
 #include "sensors.h"
 #include "encoders.h"
+#include "record.h"
 #include "lcdmenu.h"
 #include "lcdmenu.h"
 #include "lib.h"
@@ -19,9 +20,25 @@ void operatorControl() {
 		motorSet(mTopRight,mTopRightDir*rightStick);
 		motorSet(mBottomRight,mBottomRightDir*rightStick);
 
-		int arm=(joystickGetDigital(1,5,JOY_UP)*-127)+(joystickGetDigital(1,5,JOY_DOWN)*127);
+		int arm=(joystickGetDigital(1,5,JOY_UP)*127)+(joystickGetDigital(1,5,JOY_DOWN)*-127);
 		motorSet(mArmLeft,mArmLeftDir*arm);
 		motorSet(mArmRight,mArmRightDir*arm);
+
+		int claw=(joystickGetDigital(1,6,JOY_UP)*127)+(joystickGetDigital(1,6,JOY_DOWN)*-127);
+		motorSet(mClaw,mClawDir*claw);
+
+		int tilt=(joystickGetDigital(1,8,JOY_UP)*127)+(joystickGetDigital(1,8,JOY_DOWN)*-127);
+		motorSet(mTilt,mTiltDir*tilt);
+
+		if (joystickGetDigital(1,7,JOY_LEFT)) {
+			record("test");
+			lcdRender();
+		}
+
+		if (joystickGetDigital(1,7,JOY_UP)) {
+			play("test");
+			lcdRender();
+		}
 
 		lcdUpdate();
 		delay(20);
