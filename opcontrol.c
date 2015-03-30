@@ -22,7 +22,15 @@ void operatorControl() {
 		motorSet(mBottomRight,mBottomRightDir*rightStick);
 
 		int armDir=joystickGetDigital(1,5,JOY_UP)-joystickGetDigital(1,5,JOY_DOWN);
-		stabilizeArm(armDir,armDir,1);
+		int armDirLeft=armDir;
+		int armDirRight=armDir;
+		if (joystickGetDigital(1,8,JOY_LEFT)) {
+			armDirRight=0;
+		}
+		if (joystickGetDigital(1,8,JOY_RIGHT)) {
+			armDirLeft=0;
+		}
+		stabilizeArm(armDirLeft,armDirRight,1);
 
 		int claw=(joystickGetDigital(1,6,JOY_UP)*127)+(joystickGetDigital(1,6,JOY_DOWN)*-127);
 		motorSet(mClaw,mClawDir*claw);
