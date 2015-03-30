@@ -39,7 +39,7 @@ void stabilizeArm(int ld,int rd,int hold) {
 		avg=ar;
 	} else {
 		// pots working
-		of=(al-ar)/20;
+		of=(al-ar)/4;
 	}
 	int hp=0; // hold power
 	if (hold&&(!invalid(armHold))&&avg&&(!ld)&&(!rd)) {
@@ -49,7 +49,7 @@ void stabilizeArm(int ld,int rd,int hold) {
 			hp=((avg-armHold)/2)*127;
 		}
 	}
-	motorSet(mArmLeft,clamp((mArmLeftDir*127*ld)+hp-max(of,0),-127,127));
-	motorSet(mArmRight,clamp((mArmRightDir*127*rd)+hp+min(of,0),-127,127));
+	motorSet(mArmLeft,clamp((mArmLeftDir*127*ld)+hp-of,-127,127));
+	motorSet(mArmRight,clamp((mArmRightDir*127*rd)+hp+of,-127,127));
 }
 
