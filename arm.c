@@ -2,6 +2,7 @@
 #include "lib.h"
 #include "sensors.h"
 #include "motors.h"
+#include "arm.h"
 
 void setArm(int val) {
 	int arm;
@@ -14,3 +15,41 @@ void setArm(int val) {
 	motorSet(mArmLeft,0);
 	motorSet(mArmRight,0);
 }
+
+int armHold=0;
+
+int invalid(int v) {
+	return v<900||v>3100;
+}
+
+void stabilizeArm(int ld,int rd,int hold) {
+	// detect failure of pots
+	int al=analogRead(sArmLeft)*sArmLeftDir;
+	int ar=analogRead(sArmRight)*sArmRightDir;
+	int avg=0;
+	int of=0; // adjustment offset
+	if (invalid(al)&&invalid(ar)) {
+		armHold=0;
+		// dual failure
+	} else if (invalid(ar)) {
+		// right pot failed
+		avg=al;
+	} else if (invalid(al)) {
+		// left pot failed
+		avg=ar;
+	} else {
+		// pots working
+		of=(al-ar)/20;
+	}
+	int hp=0; // hold power
+	if (hold&&(!invalid(armHold))&&avg&&(!ld)&&(!rd)) {
+		if (ld||rd) {
+			armHold=avg;
+		} else {
+			hp=((avg-armHold)/2)*127;
+		}
+	}
+	motorSet(mArmLeft,clamp((mArmLeftDir*127*ld)+hp-max(of,0),-127,127));
+	motorSet(mArmRight,clamp((mArmRightDir*127*rd)+hp+min(of,0),-127,127));
+}
+
