@@ -6,6 +6,7 @@
 #include "lcdmenu.h"
 #include "lcdmenu.h"
 #include "lib.h"
+#include "arm.h"
 
 void operatorControl() {
 	lcdRender();
@@ -20,9 +21,8 @@ void operatorControl() {
 		motorSet(mTopRight,mTopRightDir*rightStick);
 		motorSet(mBottomRight,mBottomRightDir*rightStick);
 
-		int arm=(joystickGetDigital(1,5,JOY_UP)*127)+(joystickGetDigital(1,5,JOY_DOWN)*-127);
-		motorSet(mArmLeft,mArmLeftDir*arm);
-		motorSet(mArmRight,mArmRightDir*arm);
+		int armDir=joystickGetDigital(1,5,JOY_UP)-joystickGetDigital(1,5,JOY_DOWN);
+		stabilizeArm(armDir,armDir,1);
 
 		int claw=(joystickGetDigital(1,6,JOY_UP)*127)+(joystickGetDigital(1,6,JOY_DOWN)*-127);
 		motorSet(mClaw,mClawDir*claw);
