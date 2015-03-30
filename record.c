@@ -94,6 +94,8 @@ void record(const char* name) {
 				armDir=joystickGetDigital(1,5,JOY_UP)-joystickGetDigital(1,5,JOY_DOWN);
 				delay(50);
 			}
+			motorSet(mArmLeft,0);
+			motorSet(mArmRight,0);
 			cFrame.param=avg(analogRead(sArmLeft)*sArmLeftDir,analogRead(sArmRight)*sArmRightDir);
 		} else if (clawDir) {
 			newFrame(ac_claw);

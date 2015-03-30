@@ -10,5 +10,7 @@ void setArm(int val) {
 		int dir=arm-val>0?127:-127;
 		motorSet(mArmLeft,mArmLeftDir*dir);
 		motorSet(mArmRight,mArmRightDir*dir);
-	} while (abs(arm-val)>100);
+	} while (abs(arm-val)>50);
+	motorSet(mArmLeft,0);
+	motorSet(mArmRight,0);
 }

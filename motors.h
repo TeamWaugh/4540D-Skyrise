@@ -26,6 +26,6 @@
 #define mTiltDir -1
 
 // the minimum motor power to move the drive train
-#define minDrive 20
+#define minDrive 30
 
 #endif /* MOTORS_H_ */

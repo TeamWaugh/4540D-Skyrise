@@ -6,8 +6,9 @@
 #include "lib.h"
 #include <math.h>
 
-int slopeLen=100;
-float adjustment=20;
+int slopeLen=30;
+float adjustment=0.4;
+int speed=127;
 
 void enc(float l,float r,int edist) {
 	if (edist<0) {
@@ -24,9 +25,9 @@ void enc(float l,float r,int edist) {
 		int rDist=((encoderGet(eRight)*sEncRightDir)-rBase)/r;
 		cdist=favg(lDist,rDist);
 
-		//float power=fclampf(fminf(cdist/slopeLen,(edist-cdist)/(slopeLen/2))*127,minDrive,127);
-		float power=64;
-		float offset=(lDist-rDist)*(adjustment/power);
+		float power=fclampf(fminf(cdist/slopeLen,(edist-cdist)/(slopeLen*4))*speed,minDrive,speed);
+		//float power=64;
+		float offset=(lDist-rDist)*adjustment;
 
 		int powerLeft=fclampf(power-offset,-127,127);
 		motorSet(mTopLeft,mTopLeftDir*powerLeft*l);
@@ -48,14 +49,17 @@ void enc(float l,float r,int edist) {
 int encReverse=0;
 
 void forward(int dist) {
+	speed=127;
 	enc(1,1,dist);
 }
 
 void backward(int dist) {
+	speed=127;
 	enc(-1,-1,dist);
 }
 
 void turnLeft(int deg) {
+	speed=64;
 	if (encReverse) {
 		enc(1,-1,deg*encToDeg);
 	} else {
@@ -64,6 +68,7 @@ void turnLeft(int deg) {
 }
 
 void turnRight(int deg) {
+	speed=64;
 	if (encReverse) {
 		enc(-1,1,deg*encToDeg);
 	} else {
