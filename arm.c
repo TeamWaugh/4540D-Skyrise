@@ -4,18 +4,6 @@
 #include "motors.h"
 #include "arm.h"
 
-void setArm(int val) {
-	int arm;
-	do {
-		arm=avg(analogRead(sArmLeft)*sArmLeftDir,analogRead(sArmRight)*sArmRightDir);
-		int dir=arm-val>0?127:-127;
-		motorSet(mArmLeft,mArmLeftDir*dir);
-		motorSet(mArmRight,mArmRightDir*dir);
-	} while (abs(arm-val)>50);
-	motorSet(mArmLeft,0);
-	motorSet(mArmRight,0);
-}
-
 int armHold=0;
 
 int invalid(int v) {
@@ -53,3 +41,13 @@ void stabilizeArm(int ld,int rd,int hold) {
 	motorSet(mArmRight,clamp((mArmRightDir*127*rd)+hp+of,-127,127));
 }
 
+void setArm(int val) {
+	int arm;
+	do {
+		arm=avg(analogRead(sArmLeft)*sArmLeftDir,analogRead(sArmRight)*sArmRightDir);
+		int dir=arm-val>0?1:-1;
+		stabilizeArm(dir,dir,0);
+	} while (abs(arm-val)>50);
+	motorSet(mArmLeft,0);
+	motorSet(mArmRight,0);
+}

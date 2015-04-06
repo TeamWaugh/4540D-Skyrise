@@ -30,8 +30,18 @@ void fputns(const char* str,size_t n,FILE* stream) {
 
 void writeFrame() {
 	if (cFrame.action!=ac_null) {
-		fputns((const char*)&cFrame,sizeof(recordFrame),cStream);
+		fputns((const char*)&cFrame.action,sizeof(cFrame.action),cStream);
+		fputns((const char*)&cFrame.param,sizeof(cFrame.param),cStream);
 	}
+}
+
+int readFrame() {
+	size_t len;
+	len=fread((void*)&cFrame.action,sizeof(cFrame.action),1,cStream);
+	if (len!=sizeof(cFrame.action)) return 0;
+	len=fread((void*)&cFrame.param,sizeof(cFrame.param),1,cStream);
+	if (len!=sizeof(cFrame.param)) return 0;
+	return 1;
 }
 
 void newFrame(unsigned char action) {
@@ -130,12 +140,7 @@ void record(const char* name) {
 void play(const char* name) {
 	lcdPrint(uart1,1,"Playing %s",name);
 	cStream=fopen(name,"r");
-	while (1) {
-		size_t vread=fread((void*)&cFrame,sizeof(recordFrame),1,cStream);
-		if (!vread||vread!=sizeof(recordFrame)) {
-			fclose(cStream);
-			return;
-		}
+	while (readFrame()) {
 		if (cFrame.action==ac_move) {
 			lcdPrint(uart1,2,"forward %d",(int)cFrame.param);
 			forward((int)cFrame.param);
@@ -155,5 +160,6 @@ void play(const char* name) {
 			motorSet(mTilt,0);
 		}
 	}
+	fclose(cStream);
 }
 

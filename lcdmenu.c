@@ -5,6 +5,7 @@
 #include "lcdmenu.h"
 #include "motors.h"
 #include "sensors.h"
+#include "record.h"
 
 int autonColor=1;
 int autonSide=1;
@@ -58,6 +59,10 @@ void lcdRender() {
 					lcdPrintCenter(uart1,1,"%d",analogRead(sClawTilt)*sClawTiltDir);
 					lcdSetText(uart1,2," < Claw       >");
 				break;
+				case 5:
+					lcdSetText(uart1,1,"");
+					lcdSetText(uart1,2," < Record     >");
+				break;
 			}
 		break;
 		case 2:
@@ -79,6 +84,15 @@ void lcdRender() {
 				mSelect==3?0xF6:0x20,
 				mSelect==4?0xF6:0x20
 			);
+		break;
+		case 4:
+			mSelect=max(mSelect,0);
+			lcdSetCenter(uart1,1,"Recording");
+			if (mSelect==0) {
+				lcdSetCenter(uart1,2,"Back");
+			} else {
+				lcdPrintCenter(uart1,2,"%d",mSelect);
+			}
 		break;
 	}
 }
@@ -119,6 +133,9 @@ void lcdUpdate() {
 			case 1:
 				if (mSelect==0) {
 					mNum=0;
+				} else if (mSelect==5) {
+					mNum=4;
+					mSelect=1;
 				}
 			break;
 			case 2:
@@ -142,10 +159,28 @@ void lcdUpdate() {
 					autonNum=mSelect;
 				}
 			break;
+			case 4:
+				if (mSelect==0) {
+					mNum=0;
+				}
+			break;
 		}
 		lcdRender();
 	} else if (mNum==1||btn) {
 		lcdRender();
+	} else if (mNum==4) {
+		if (joystickGetDigital(1,7,JOY_LEFT)) {
+			char out[16];
+			snprintf(out,16,"debug%d",mSelect);
+			record(out);
+			lcdRender();
+		}
+		if (joystickGetDigital(1,7,JOY_UP)) {
+			char out[16];
+			snprintf(out,16,"debug%d",mSelect);
+			play(out);
+			lcdRender();
+		}
 	}
 	// wait until button is released
 	if (btn) {

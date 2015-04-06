@@ -25,10 +25,10 @@ void operatorControl() {
 		int armDirLeft=armDir;
 		int armDirRight=armDir;
 		if (joystickGetDigital(1,8,JOY_LEFT)) {
-			armDirRight=0;
+			*(armDir>0?&armDirRight:&armDirLeft)=0;
 		}
 		if (joystickGetDigital(1,8,JOY_RIGHT)) {
-			armDirLeft=0;
+			*(armDir>0?&armDirLeft:&armDirRight)=0;
 		}
 		stabilizeArm(armDirLeft,armDirRight,1);
 
@@ -37,16 +37,6 @@ void operatorControl() {
 
 		int tilt=(joystickGetDigital(1,8,JOY_UP)*127)+(joystickGetDigital(1,8,JOY_DOWN)*-127);
 		motorSet(mTilt,mTiltDir*tilt);
-
-		if (joystickGetDigital(1,7,JOY_LEFT)) {
-			record("test");
-			lcdRender();
-		}
-
-		if (joystickGetDigital(1,7,JOY_UP)) {
-			play("test");
-			lcdRender();
-		}
 
 		lcdUpdate();
 		delay(20);
